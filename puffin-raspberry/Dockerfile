@@ -73,7 +73,7 @@ ENV LANG en_US.UTF-8
 #======================================
 # Add pyenv script
 #======================================
-USER tester
-WORKDIR /home/tester
-COPY install_pyenv.sh /home/tester
-RUN chmod +x /home/tester/install_pyenv.sh & /home/tester/install_pyenv.sh
+WORKDIR /root
+COPY install_pyenv.sh /root
+RUN chmod +x /root/install_pyenv.sh & /root/install_pyenv.sh
+
