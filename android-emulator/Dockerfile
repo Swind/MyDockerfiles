@@ -1,7 +1,8 @@
 FROM ubuntu:18.04
 
-# ================================================ 
-# Android SDK
+# ================================================
+#
+# Gerneral packages
 #
 # ================================================
 RUN dpkg --add-architecture i386 \
@@ -11,14 +12,22 @@ RUN dpkg --add-architecture i386 \
  && apt-get install -y --no-install-recommends openjdk-8-jdk \
  && apt-get install -y --no-install-recommends supervisor \
  && apt-get install -y libqt5widgets5 socat net-tools \
+ && apt-get install -y xterm x11vnc openbox \
+ && apt-get install -y ffmpeg \
+ && apt-get install -y qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists /var/cache/apt
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
-# Create a non-root user
 RUN mkdir -p /root
 WORKDIR /root
+
+# ================================================
+#
+# Android SDK
+#
+# ================================================
 ENV ANDROID_HOME="/root/android-sdk-linux"
 
 # Download Android SDK
@@ -37,19 +46,26 @@ ENV PATH="${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${PATH}"
 ADD scripts/license_accepter.sh /root/android-sdk-linux
 RUN $ANDROID_HOME/license_accepter.sh $ANDROID_HOME
 
-# ================================================
-#
-# Install noVNC 
-#
-# ================================================
-RUN git clone https://github.com/novnc/noVNC.git \
- && cd noVNC \
- && git checkout v1.1.0 \
- && git clone https://github.com/novnc/websockify.git utils/websockify
+#=======
+# noVNC
+# Use same commit id that docker-selenium uses
+# https://github.com/elgalu/docker-selenium/blob/236b861177bd2917d864e52291114b1f5e4540d7/Dockerfile#L412-L413
+#=======
+ENV NOVNC_SHA="b403cb92fb8de82d04f305b4f14fa978003890d7" \
+    WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b"
+RUN  wget -nv -O noVNC.zip "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
+ && unzip -x noVNC.zip \
+ && rm noVNC.zip  \
+ && mv noVNC-${NOVNC_SHA} noVNC \
+ && wget -nv -O websockify.zip "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
+ && unzip -x websockify.zip \
+ && mv websockify-${WEBSOCKIFY_SHA} ./noVNC/utils/websockify \
+ && rm websockify.zip \
+ && ln noVNC/vnc_auto.html noVNC/index.html
 
 # ================================================
 #
-# Install Android AVD and Emulator 
+# Install Android AVD and Emulator
 #
 # ================================================
 ENV ABI="x86_64" \
