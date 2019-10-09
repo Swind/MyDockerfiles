@@ -88,27 +88,9 @@ RUN  wget -nv -O noVNC.zip "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}
 
 # ================================================
 #
-# Install Android AVD and Emulator
+# Copy config files
 #
 # ================================================
-ENV ABI=${ABI:-"x86_64"} \
-    TARGET=${TARGET:-"android-26"} \
-    TAG=${TAG:-"google_apis"} \
-    NAME="Docker" \
-    ANDROID_LOG_TAGS="e" \
-    # Argument `-qemu -vnc :0` is required for VNC and noVNC to work
-    # You can still override this variable: just add this argument to the end
-    ANDROID_EMULATOR_EXTRA_ARGS="-skin 1080x1920 -memory 2048 -gpu swiftshader_indirect -no-boot-anim -qemu" \
-    noVNC="false"
-
-# Install android emulator
-RUN mkdir -p $HOME/.android \
- && touch $HOME/.android/repositories.cfg \
- && yes yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose \
-        "tools" \
-        "platform-tools" \
-        "platforms;${TARGET}" \
-        "system-images;${TARGET};${TAG};${ABI}"
 
 ADD configs/sources1810.list /etc/apt/sources.list.d/
 ADD configs/x11vnc.pref /etc/apt/preferences.d/
@@ -118,8 +100,11 @@ ADD scripts/socat.sh /root
 ADD scripts/supervisord.conf /root
 ADD scripts/entrypoint.sh /root
 
-
-# android emulator ports
+# ================================================
+#
+# Start supervisord and emualtor
+#
+# ================================================
 EXPOSE 5554 5555
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["/usr/bin/supervisord"]
