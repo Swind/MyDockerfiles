@@ -5,7 +5,7 @@ FROM swind/android-emulator-base:latest
 # Install Android AVD and Emulator
 #
 # ================================================
-ENV ABI=${ABI:-"x86_64"} \
+ENV ABI=${ABI:-"x86"} \
     TARGET=${TARGET:-"android-27"} \
     TAG=${TAG:-"google_apis"} \
     NAME="Docker" \
