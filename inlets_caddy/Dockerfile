@@ -61,7 +61,6 @@ LABEL org.opencontainers.image.source="https://github.com/caddyserver/caddy-dock
 
 EXPOSE 80
 EXPOSE 443
-EXPOSE 2019
 
 WORKDIR /srv
 

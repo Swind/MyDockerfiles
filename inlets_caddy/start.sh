@@ -16,8 +16,8 @@ echo "Domain name is ${DOMAIN_NAME}"
 cat > /srv/Caddyfile << EOF
 ${DOMAIN_NAME}
 
-reverse_proxy localhost:8000
-reverse_proxy /tunnel localhost:8000
+reverse_proxy localhost:8090
+reverse_proxy /tunnel localhost:8090
 EOF
 
 echo "Caddyfile"
