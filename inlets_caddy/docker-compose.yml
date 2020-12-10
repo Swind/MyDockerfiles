@@ -1,0 +1,11 @@
+version: "3"
+services:
+  inlets:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      - DOMAIN_NAME=<DOMAIN_NAME>
+      - TOKEN=<TOKEN>
+
+
