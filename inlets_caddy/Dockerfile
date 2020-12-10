@@ -64,6 +64,4 @@ EXPOSE 443
 
 WORKDIR /srv
 
-COPY start.sh /srv/start.sh
-
 CMD ["/bin/bash", "/srv/start.sh"]

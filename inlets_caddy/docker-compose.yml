@@ -5,8 +5,10 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./srv:/srv
     environment:
-      - DOMAIN_NAME=<DOMAIN_NAME>
-      - TOKEN=<TOKEN>
+      - DOMAIN_NAME=example.domain
+      - TOKEN=token
 
 

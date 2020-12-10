@@ -1,0 +1,10 @@
+{$DOMAIN_NAME}
+
+{$DOMAIN_NAME} {
+  reverse_proxy /tunnel localhost:8090
+}
+
+chatbot.{$DOMAIN_NAME} {
+  reverse_proxy localhost:8090
+}
+
